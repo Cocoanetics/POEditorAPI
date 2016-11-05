@@ -8,5 +8,24 @@
 
 import Foundation
 
-print("Hello, World!")
+let poeditor = POEditor()
+
+let sema = DispatchSemaphore(value: 0)
+
+//poeditor.listProjects { (list) in
+//	sema.signal()
+//}
+
+poeditor.exportProjectTranslation(projectID: 41593, languageCode: "en-us", type: .xliff) { result in
+	
+	if case .success(let url) = result
+	{
+		print(url)
+	}
+	
+		sema.signal()
+}
+
+sema.wait()
+
 
