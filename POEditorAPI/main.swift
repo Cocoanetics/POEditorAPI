@@ -12,11 +12,13 @@ let poeditor = POEditor()
 
 let sema = DispatchSemaphore(value: 0)
 
-//poeditor.listProjects { (list) in
-//	sema.signal()
-//}
+poeditor.listProjects { (list) in
+	sema.signal()
+}
 
-poeditor.exportProjectTranslation(projectID: 41593, languageCode: "en-us", type: .xliff) { result in
+sema.wait()
+
+poeditor.exportProjectTranslation(projectID: 41593, languageCode: "de", type: .xliff) { result in
 	
 	if case .success(let url) = result
 	{

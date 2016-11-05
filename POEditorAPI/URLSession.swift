@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum WebServiceError: Error
-{
-	case unexpectedResponse(String)
-}
-
 extension URLSession
 {
 	func dataTaskReturningJSON(with request: URLRequest, completion: WebServiceCompletionHandler<Any>?) -> URLSessionDataTask
