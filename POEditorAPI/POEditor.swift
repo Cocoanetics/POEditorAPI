@@ -40,13 +40,15 @@ class POEditor: WebService
 	}()
 	
 	/// API Token to pass with all requests
-	var token = "ea5a73dbeea02e992e36671d437679d9";
+	var token: String! = "ea5a73dbeea02e992e36671d437679d9";
 	
 	// MARK: - Public Interface
 	
 	/// List projects
 	func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
+		precondition(token != nil, "API Token not set")
+		
 		let parameters = ["api_token" : token,
 		                  "action" : "list_projects"]
 		let request = URLRequest.formPost(url: endpoint, fields: parameters)
@@ -57,6 +59,8 @@ class POEditor: WebService
 	/// Create a new project
 	func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
 	{
+		precondition(token != nil, "API Token not set")
+
 		let parameters = ["api_token" : token,
 		                  "action" : "create_project",
 		                  "name": name] as [String : Any]
@@ -71,6 +75,8 @@ class POEditor: WebService
 	/// List langauges of specific project
 	func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
+		precondition(token != nil, "API Token not set")
+
 		let parameters = ["api_token" : token,
 		                  "action" : "list_languages",
 		                  "id": projectID] as [String : Any]
@@ -83,6 +89,8 @@ class POEditor: WebService
 	/// Expert project translations into a file
 	func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportType, completion: WebServiceCompletionHandler<URL>?)
 	{
+		precondition(token != nil, "API Token not set")
+
 		let parameters = ["api_token" : token,
 		                  "action" : "export",
 		                  "id": projectID,
@@ -97,7 +105,7 @@ class POEditor: WebService
 	// MARK: - Response Processing
 	
 	/// Processes the JSON dictionary, expecting a certain type under the resultKey
-	private func processResultJSON<T>(dictionary: JSONDictionary, resultKey: String?) throws -> T
+	private func processResultJSON<T>(dictionary: JSONDictionary, resultKey: String) throws -> T
 	{
 		/// POEditor returns status in response key
 		guard let response = dictionary["response"] as? JSONDictionary else
@@ -111,27 +119,16 @@ class POEditor: WebService
 			throw WebServiceError.unexpectedResponse(message ?? "Unknown Error")
 		}
 
-		var foundResult: Any?
-		
-		if let resultKey = resultKey
+		guard let result = dictionary[resultKey] ?? response[resultKey] else
 		{
-			guard let result = dictionary[resultKey] ?? response[resultKey] else
-			{
-				throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
-			}
-			
-			foundResult = result
-		}
-		else
-		{
-			foundResult = response
+			throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
 		}
 		
-		if let typedResult = foundResult as? T
+		if let typedResult = result as? T
 		{
 			return typedResult
 		}
-		else if let string = foundResult as? String, T.self == URL.self
+		else if let string = result as? String, T.self == URL.self
 		{
 			// special case where a URL is expected, but the result is a string
 			let url = URL(string: string) as! T
@@ -144,7 +141,7 @@ class POEditor: WebService
 	}
 	
 	/// Creates a data task which picks out the correct result from the JSON dictionary
-	private func responseProcessingDataTask<T>(with request: URLRequest, resultKey: String? = nil, completion: WebServiceCompletionHandler<T>?)->URLSessionDataTask
+	private func responseProcessingDataTask<T>(with request: URLRequest, resultKey: String, completion: WebServiceCompletionHandler<T>?)->URLSessionDataTask
 	{
 		return session.dataTaskReturningJSON(with: request) { (result) in
 			
@@ -160,8 +157,6 @@ class POEditor: WebService
 							throw WebServiceError.unexpectedResponse("JSON response is not a dictionary")
 						}
 					
-						
-						
 						// the value at the given key needs to be the expected type
 						let typedResult: T = try self.processResultJSON(dictionary: dictionary, resultKey: resultKey)
 					
