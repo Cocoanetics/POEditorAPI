@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		A74AAF791DCDF641003F1F9C /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF781DCDF641003F1F9C /* WebService.swift */; };
 		A74AAF7B1DCDF7CF003F1F9C /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF7A1DCDF7CF003F1F9C /* POEditor.swift */; };
-		A74AAF7D1DCE3801003F1F9C /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF7C1DCE3801003F1F9C /* URLRequest.swift */; };
-		A74AAF7F1DCE45DA003F1F9C /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF7E1DCE45DA003F1F9C /* URLSession.swift */; };
+		A74AAF7D1DCE3801003F1F9C /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF7C1DCE3801003F1F9C /* URLRequest+WebService.swift */; };
+		A74AAF7F1DCE45DA003F1F9C /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AAF7E1DCE45DA003F1F9C /* URLSession+WebService.swift */; };
 		A790D6991DCDF35F0060C52B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A790D6981DCDF35F0060C52B /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,8 +29,8 @@
 /* Begin PBXFileReference section */
 		A74AAF781DCDF641003F1F9C /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		A74AAF7A1DCDF7CF003F1F9C /* POEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POEditor.swift; sourceTree = "<group>"; };
-		A74AAF7C1DCE3801003F1F9C /* URLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
-		A74AAF7E1DCE45DA003F1F9C /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		A74AAF7C1DCE3801003F1F9C /* URLRequest+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLRequest+WebService.swift"; sourceTree = "<group>"; };
+		A74AAF7E1DCE45DA003F1F9C /* URLSession+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+WebService.swift"; sourceTree = "<group>"; };
 		A790D6951DCDF35F0060C52B /* POEditorAPI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = POEditorAPI; sourceTree = BUILT_PRODUCTS_DIR; };
 		A790D6981DCDF35F0060C52B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,8 +68,8 @@
 				A790D6981DCDF35F0060C52B /* main.swift */,
 				A74AAF781DCDF641003F1F9C /* WebService.swift */,
 				A74AAF7A1DCDF7CF003F1F9C /* POEditor.swift */,
-				A74AAF7C1DCE3801003F1F9C /* URLRequest.swift */,
-				A74AAF7E1DCE45DA003F1F9C /* URLSession.swift */,
+				A74AAF7C1DCE3801003F1F9C /* URLRequest+WebService.swift */,
+				A74AAF7E1DCE45DA003F1F9C /* URLSession+WebService.swift */,
 			);
 			path = POEditorAPI;
 			sourceTree = "<group>";
@@ -134,9 +134,9 @@
 			files = (
 				A74AAF7B1DCDF7CF003F1F9C /* POEditor.swift in Sources */,
 				A74AAF791DCDF641003F1F9C /* WebService.swift in Sources */,
-				A74AAF7F1DCE45DA003F1F9C /* URLSession.swift in Sources */,
+				A74AAF7F1DCE45DA003F1F9C /* URLSession+WebService.swift in Sources */,
 				A790D6991DCDF35F0060C52B /* main.swift in Sources */,
-				A74AAF7D1DCE3801003F1F9C /* URLRequest.swift in Sources */,
+				A74AAF7D1DCE3801003F1F9C /* URLRequest+WebService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
