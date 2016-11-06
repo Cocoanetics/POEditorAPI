@@ -6,12 +6,11 @@
 //  Copyright © 2016 Cocoanetics. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 
 typealias JSONDictionary = [String: Any]
-typealias JSONArray = [Any]
 
-
+/// The types of file that translations can be exported in
 enum ExportType: String
 {
 	case po = "po"
@@ -31,27 +30,34 @@ enum ExportType: String
 
 class POEditor: WebService
 {
+	// MARK: - Properties
 	/// Specify API endpoint
 	var endpoint = URL(string: "https://poeditor.com/api/")!
 	
-	/// Specify session config
-	var sessionConfiguration: URLSessionConfiguration {
-		return URLSessionConfiguration.ephemeral
-	}
+	/// Specify ephemeral URL session
+	lazy var session = {
+		return URLSession(configuration: .ephemeral)
+	}()
 	
+	/// API Token to pass with all requests
+	var token = "ea5a73dbeea02e992e36671d437679d9";
 	
+	// MARK: - Public Interface
+	
+	/// List projects
 	func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
-		let parameters = ["api_token" : "ea5a73dbeea02e992e36671d437679d9",
+		let parameters = ["api_token" : token,
 		                  "action" : "list_projects"]
 		let request = URLRequest.formPost(url: endpoint, fields: parameters)
 		
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
 	}
 	
+	/// List langauges of specific project
 	func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
-		let parameters = ["api_token" : "ea5a73dbeea02e992e36671d437679d9",
+		let parameters = ["api_token" : token,
 		                  "action" : "list_languages",
 		                  "id": projectID] as [String : Any]
 		
@@ -60,9 +66,10 @@ class POEditor: WebService
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
 	}
 	
+	/// Expert project translations into a file
 	func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportType, completion: WebServiceCompletionHandler<URL>?)
 	{
-		let parameters = ["api_token" : "ea5a73dbeea02e992e36671d437679d9",
+		let parameters = ["api_token" : token,
 		                  "action" : "export",
 		                  "id": projectID,
 		                  "language": languageCode,
@@ -74,13 +81,11 @@ class POEditor: WebService
 	}
 	
 	// MARK: - Response Processing
-	private func processResultJSON<T>(object: Any, resultKey: String) throws -> T
+	
+	/// Processes the JSON dictionary, expecting a certain type under the resultKey
+	private func processResultJSON<T>(dictionary: JSONDictionary, resultKey: String) throws -> T
 	{
-		guard let dictionary = object as? JSONDictionary else
-		{
-			throw WebServiceError.unexpectedResponse("JSON response was not a dictionary")
-		}
-		
+		/// POEditor returns status in response key
 		guard let response = dictionary["response"] as? JSONDictionary else
 		{
 			throw WebServiceError.unexpectedResponse("JSON response did not contain response dictionary")
@@ -116,18 +121,27 @@ class POEditor: WebService
 	/// Creates a data task which picks out the correct result from the JSON dictionary
 	private func responseProcessingDataTask<T>(with request: URLRequest, resultKey: String, completion: WebServiceCompletionHandler<T>?)->URLSessionDataTask
 	{
-		return URLSession.shared.dataTaskReturningJSON(with: request) { (result) in
+		return session.dataTaskReturningJSON(with: request) { (result) in
 			
 			do
 			{
 				switch result
 				{
-				case .success(let object):
-					let typedResult: T =  try self.processResultJSON(object: object, resultKey: resultKey)
-					completion?(.success(typedResult))
+					case .success(let object):
 					
-				case .failure(let error):
-					throw error
+						// we expect a dictionary as response
+						guard let dictionary = object as? JSONDictionary else
+						{
+							throw WebServiceError.unexpectedResponse("JSON response is not a dictionary")
+						}
+					
+						// the value at the given key needs to be the expected type
+						let typedResult: T = try self.processResultJSON(dictionary: dictionary, resultKey: resultKey)
+					
+						completion?(.success(typedResult))
+					
+					case .failure(let error):
+						throw error
 				}
 				
 			}

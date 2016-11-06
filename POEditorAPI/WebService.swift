@@ -33,15 +33,13 @@ protocol WebService
 	/// the endpoint URL of the receiver
 	var endpoint: URL { get }
 	
-	/// The session configuration to use for requests
-	var sessionConfiguration: URLSessionConfiguration { get }
+	/// The session to use for requests
+	var session: URLSession  { get }
 }
 
 extension WebService
 {
-	var sessionConfiguration: URLSessionConfiguration {
-		return URLSessionConfiguration.default
+	var session: URLSession {
+		return URLSession.shared
 	}
-	
-
 }
