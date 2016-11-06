@@ -54,6 +54,20 @@ class POEditor: WebService
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
 	}
 	
+	/// Create a new project
+	func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
+	{
+		let parameters = ["api_token" : token,
+		                  "action" : "create_project",
+		                  "name": name] as [String : Any]
+
+		let request = URLRequest.formPost(url: endpoint, fields: parameters)
+		
+		// note: API is inconsistent, the new project's ID is part of the reponse returned
+		
+		responseProcessingDataTask(with: request, resultKey: "item", completion: completion).resume()
+	}
+	
 	/// List langauges of specific project
 	func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
@@ -83,7 +97,7 @@ class POEditor: WebService
 	// MARK: - Response Processing
 	
 	/// Processes the JSON dictionary, expecting a certain type under the resultKey
-	private func processResultJSON<T>(dictionary: JSONDictionary, resultKey: String) throws -> T
+	private func processResultJSON<T>(dictionary: JSONDictionary, resultKey: String?) throws -> T
 	{
 		/// POEditor returns status in response key
 		guard let response = dictionary["response"] as? JSONDictionary else
@@ -96,17 +110,28 @@ class POEditor: WebService
 			let message = response["message"] as? String
 			throw WebServiceError.unexpectedResponse(message ?? "Unknown Error")
 		}
+
+		var foundResult: Any?
 		
-		guard let result = dictionary[resultKey] else
+		if let resultKey = resultKey
 		{
-			throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
+			guard let result = dictionary[resultKey] ?? response[resultKey] else
+			{
+				throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
+			}
+			
+			foundResult = result
+		}
+		else
+		{
+			foundResult = response
 		}
 		
-		if let typedResult = result as? T
+		if let typedResult = foundResult as? T
 		{
 			return typedResult
 		}
-		else if let string = result as? String, T.self == URL.self
+		else if let string = foundResult as? String, T.self == URL.self
 		{
 			// special case where a URL is expected, but the result is a string
 			let url = URL(string: string) as! T
@@ -119,7 +144,7 @@ class POEditor: WebService
 	}
 	
 	/// Creates a data task which picks out the correct result from the JSON dictionary
-	private func responseProcessingDataTask<T>(with request: URLRequest, resultKey: String, completion: WebServiceCompletionHandler<T>?)->URLSessionDataTask
+	private func responseProcessingDataTask<T>(with request: URLRequest, resultKey: String? = nil, completion: WebServiceCompletionHandler<T>?)->URLSessionDataTask
 	{
 		return session.dataTaskReturningJSON(with: request) { (result) in
 			
@@ -135,6 +160,8 @@ class POEditor: WebService
 							throw WebServiceError.unexpectedResponse("JSON response is not a dictionary")
 						}
 					
+						
+						
 						// the value at the given key needs to be the expected type
 						let typedResult: T = try self.processResultJSON(dictionary: dictionary, resultKey: resultKey)
 					

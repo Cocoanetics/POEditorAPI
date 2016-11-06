@@ -12,7 +12,12 @@ let poeditor = POEditor()
 
 let sema = DispatchSemaphore(value: 0)
 
-poeditor.listProjects { (list) in
+poeditor.listProjects { result in
+	
+	if case .success(let projects) = result
+	{
+		print(projects)
+	}
 	sema.signal()
 }
 
@@ -27,6 +32,13 @@ poeditor.exportProjectTranslation(projectID: 41593, languageCode: "de", type: .x
 	
 		sema.signal()
 }
+
+//poeditor.createProject(name: "Test4") { result in
+//	
+//	
+//	
+//	sema.signal()
+//}
 
 sema.wait()
 
