@@ -12,9 +12,11 @@ let sema = DispatchSemaphore(value: 0)
 
 var token: String!
 var projectID: Int!
+var languages: [String]!
 
 let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let settingsFileURL = workingDirURL.appendingPathComponent("poet.json")
+var settingsNeedSaving = false
 
 do
 {
@@ -24,6 +26,7 @@ do
 	{
 		token = settings["token"] as? String
 		projectID = settings["projectID"] as? Int
+		languages = settings["languages"] as? [String]
 	}
 }
 catch _
@@ -37,6 +40,7 @@ if token == nil
 	// no api token
 	print("Enter POEditor API Token> ", terminator: "")
 	token = readLine(strippingNewline: true)
+	settingsNeedSaving = true
 }
 
 
@@ -101,6 +105,7 @@ if projectID == nil
 	{
 		let project = availableProjects[number-1]
 		projectID = Int((project["id"] as! String))
+		settingsNeedSaving = true
 	}
 	else
 	{
@@ -108,61 +113,135 @@ if projectID == nil
 		exit(1)
 	}
 }
+
+if languages == nil
+{
+	var projectLanguages: [JSONDictionary]!
 	
-// save token and project ID
+	poeditor.listProjectLanguages(projectID: projectID) { result in
+		
+		switch result
+		{
+		case .success(let languages):
+			projectLanguages = languages
+			
+		case .failure(WebServiceError.serviceError(let message)):
+			print("POEditor.com responded: \(message)")
+			exit(1)
+			break
+			
+		case .failure(WebServiceError.networkError(let error)):
+			print("Network Error: \(error.localizedDescription)")
+			exit(1)
+			break
+			
+		case .failure(let error):
+			print(error.localizedDescription)
+			break
+		}
+		
+		sema.signal()
+	}
+	
+	sema.wait()
+	
+	let completeLangs = projectLanguages.filter { (language) -> Bool in
+		if let percent = language["percentage"] as? Int, percent == 100
+		{
+			return true
+		}
+		
+		return false
+	}
+	
+	let languageCodes = completeLangs.map { (language) -> String in
+		return language["code"] as! String
+	}
+	
+	if languageCodes != languages
+	{
+		languages = languageCodes
+		settingsNeedSaving = true
+	}
+}
+
+// save project settings
+
+if settingsNeedSaving
+{
+	do
+	{
+		let dict = ["token": token, "projectID": projectID, "languages": languages] as [String : Any]
+		let data = try JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted])
+		try data.write(to: settingsFileURL)
+		
+		print("Project settings aved in " + settingsFileURL.path)
+	}
+	catch let error
+	{
+		print(error)
+		exit(1)
+	}
+}
+
+let exportFolderURL = workingDirURL.appendingPathComponent("POEditor", isDirectory: true)
+
+let fileManager = FileManager.default
 
 do
 {
-	let dict = ["token": token, "projectID": projectID] as [String : Any]
-	let data = try JSONSerialization.data(withJSONObject: dict, options: [])
-	try data.write(to: settingsFileURL)
+	if !fileManager.fileExists(atPath: exportFolderURL.path)
+	{
+		try fileManager.createDirectory(at: exportFolderURL, withIntermediateDirectories: true, attributes: nil)
+	}
 }
 catch let error
 {
-	print(error)
+	print("Unable to create output folder " + exportFolderURL.path)
+	exit(1)
 }
 
-var projectLanguages: [JSONDictionary]!
+for code in languages
+{
+	print("Exporting " + code + "...", terminator:"")
 
-poeditor.listProjectLanguages(projectID: projectID) { result in
-
-	switch result
+	let outputFileURL = exportFolderURL.appendingPathComponent(code + ".json")
+	
+	var exportError: Error?
+	
+	poeditor.exportProjectTranslation(projectID: projectID, languageCode: code, type: .json) { (result) in
+		
+		switch result
+		{
+			case .success(let url):
+				
+				do
+				{
+					let data = try Data(contentsOf: url)
+					try data.write(to: outputFileURL)
+					
+				}
+				catch let error
+				{
+					exportError = error
+				}
+			
+			case .failure(let error):
+				exportError = error
+		}
+		
+		sema.signal()
+	}
+	
+	sema.wait()
+	
+	if let error = exportError
 	{
-	case .success(let languages):
-		projectLanguages = languages
-		
-	case .failure(WebServiceError.serviceError(let message)):
-		print("POEditor.com responded: \(message)")
-		exit(1)
-		break
-		
-	case .failure(WebServiceError.networkError(let error)):
-		print("Network Error: \(error.localizedDescription)")
-		exit(1)
-		break
-		
-	case .failure(let error):
+		print("Failed")
 		print(error.localizedDescription)
-		break
 	}
-	
-	sema.signal()
-}
-
-sema.wait()
-
-let completeLangs = projectLanguages.filter { (language) -> Bool in
-	if let percent = language["percentage"] as? Int, percent == 100
+	else
 	{
-		return true
+		print("OK")
 	}
-	
-	return false
 }
-
-let codes = completeLangs.map { (language) -> String in
-	return language["code"] as! String
-}
-
-print(codes)
-
