@@ -21,6 +21,7 @@ enum WebServiceResult<T>
 enum WebServiceError: Error
 {
 	case networkError(Error)
+	case serviceError(String)
 	case unexpectedResponse(String)
 }
 

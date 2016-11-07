@@ -32,7 +32,7 @@
 		A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+WebService.swift"; sourceTree = "<group>"; };
 		A7D0D2AD1DD07E190088E04A /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		A7D0D2B01DD07E190088E04A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		A7D0D2BA1DD07ECA0088E04A /* Tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tool; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7D0D2BA1DD07ECA0088E04A /* poet */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = poet; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,7 @@
 		A790D6961DCDF35F0060C52B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7D0D2BA1DD07ECA0088E04A /* Tool */,
+				A7D0D2BA1DD07ECA0088E04A /* poet */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,7 +115,7 @@
 			);
 			name = Tool;
 			productName = Tool;
-			productReference = A7D0D2BA1DD07ECA0088E04A /* Tool */;
+			productReference = A7D0D2BA1DD07ECA0088E04A /* poet */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -261,7 +261,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = Z7L2YCUH45;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = poet;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -271,7 +271,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = Z7L2YCUH45;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = poet;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

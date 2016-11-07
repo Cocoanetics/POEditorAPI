@@ -40,15 +40,18 @@ class POEditor: WebService
 	}()
 	
 	/// API Token to pass with all requests
-	var token: String! = "ea5a73dbeea02e992e36671d437679d9";
+	var token: String //= "ea5a73dbeea02e992e36671d437679d9";
+	
+	required init(token: String)
+	{
+		self.token = token
+	}
 	
 	// MARK: - Public Interface
 	
 	/// List projects
 	func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
-		precondition(token != nil, "API Token not set")
-		
 		let parameters = ["api_token" : token,
 		                  "action" : "list_projects"] as [String : Any]
 		
@@ -60,8 +63,6 @@ class POEditor: WebService
 	/// Create a new project
 	func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
 	{
-		precondition(token != nil, "API Token not set")
-
 		let parameters = ["api_token" : token,
 		                  "action" : "create_project",
 		                  "name": name] as [String : Any]
@@ -76,8 +77,6 @@ class POEditor: WebService
 	/// List langauges of specific project
 	func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
-		precondition(token != nil, "API Token not set")
-
 		let parameters = ["api_token" : token,
 		                  "action" : "list_languages",
 		                  "id": projectID] as [String : Any]
@@ -90,8 +89,6 @@ class POEditor: WebService
 	/// Expert project translations into a file
 	func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportType, completion: WebServiceCompletionHandler<URL>?)
 	{
-		precondition(token != nil, "API Token not set")
-
 		let parameters = ["api_token" : token,
 		                  "action" : "export",
 		                  "id": projectID,
@@ -117,7 +114,7 @@ class POEditor: WebService
 		if let status = response["status"] as? String, status == "fail"
 		{
 			let message = response["message"] as? String
-			throw WebServiceError.unexpectedResponse(message ?? "Unknown Error")
+			throw WebServiceError.serviceError(message ?? "Unknown Error")
 		}
 
 		guard let result = dictionary[resultKey] ?? response[resultKey] else
