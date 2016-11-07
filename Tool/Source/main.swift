@@ -41,37 +41,43 @@ private func writeFile(name: String, translations: [Translation], toPath path: S
 	
 	var tmpStr = ""
 	
-	let stringsFileItems = translations.filter { (translation) -> Bool in
-		return translation.definition != nil
-	}
-	
-	if stringsFileItems.count > 0
+	for transUnit in translations
 	{
-		for transUnit in stringsFileItems
+		if !tmpStr.isEmpty
 		{
-			if !tmpStr.isEmpty
-			{
-				tmpStr += "\n"
-			}
-			
-			if let note = transUnit.comment, !note.isEmpty
-			{
-				let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
-				tmpStr += "/* \(noteWithLinebreaks) */\n"
-			}
-			
-			// escape double quotes to be safe
-			let translation = (transUnit.definition ?? transUnit.term).replacingOccurrences(of: "\"", with: "\\\"")
-			tmpStr += "\"\(transUnit.term)\" = \"\(translation)\";\n"
+			tmpStr += "\n"
 		}
 		
-		let outputName = justName + ".strings"
-		let outputPath = (path as NSString).appendingPathComponent(outputName)
-
-		try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
+		if let note = transUnit.comment, !note.isEmpty
+		{
+			let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
+			tmpStr += "/* \(noteWithLinebreaks) */\n"
+		}
 		
-		print("\t\(outputName) ✓")
+		// escape double quotes to be safe
+		
+		var translatedTerm: String!
+		
+		if let plural = transUnit.plurals?["other"]
+		{
+			translatedTerm = plural
+		}
+		else
+		{
+			translatedTerm = transUnit.definition ?? transUnit.term
+		}
+		
+		let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
+		
+		tmpStr += "\"\(transUnit.term)\" = \"\(cleanTranslation)\";\n"
 	}
+	
+	let outputName = justName + ".strings"
+	let outputPath = (path as NSString).appendingPathComponent(outputName)
+	
+	try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
+	
+	print("\t\(outputName) ✓")
 	
 	let stringsDictItems = translations.filter { (translation) -> Bool in
 		return translation.plurals != nil
@@ -90,6 +96,7 @@ private func writeFile(name: String, translations: [Translation], toPath path: S
 			var pluralsDict = [String: Any]()
 
 			pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
+			pluralsDict["NSStringFormatValueTypeKey"] = "d"
 			
 			for key in translation.plurals!.keys.sorted()
 			{
@@ -293,12 +300,31 @@ let exportFolderURL = workingDirURL.appendingPathComponent("POEditor", isDirecto
 
 let fileManager = FileManager.default
 
-for code in languages
+for code in languages.sorted()
 {
 	print("Exporting " + code + "...", terminator:"")
+	
+	var xcode = code
+	
+	if xcode == "zh-CN"
+	{
+		xcode = "zh-Hans"
+	}
+	else if xcode == "zh-TW"
+	{
+		xcode = "zh-Hant"
+	}
+	else if xcode == "en-us"
+	{
+		xcode = "en"
+	}
+	else if xcode == "pt-br"
+	{
+		xcode = "pt-BR"
+	}
 
-	let outputFileURL = exportFolderURL.appendingPathComponent(code + ".json")
-	let outputFolderURL = exportFolderURL.appendingPathComponent(code + ".lproj", isDirectory: true)
+	let outputFileURL = exportFolderURL.appendingPathComponent(xcode + ".json")
+	let outputFolderURL = exportFolderURL.appendingPathComponent(xcode + ".lproj", isDirectory: true)
 	
 	do
 	{
@@ -324,7 +350,7 @@ for code in languages
 				do
 				{
 					let data = try Data(contentsOf: url)
-					try data.write(to: outputFileURL)
+					//try data.write(to: outputFileURL)
 					
 					// code json
 					let translations = try JSONSerialization.jsonObject(with: data, options: []) as? [JSONDictionary]
