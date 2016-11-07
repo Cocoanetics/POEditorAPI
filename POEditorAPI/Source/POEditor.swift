@@ -50,7 +50,8 @@ class POEditor: WebService
 		precondition(token != nil, "API Token not set")
 		
 		let parameters = ["api_token" : token,
-		                  "action" : "list_projects"]
+		                  "action" : "list_projects"] as [String : Any]
+		
 		let request = URLRequest.formPost(url: endpoint, fields: parameters)
 		
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
