@@ -12,7 +12,7 @@ extension URLRequest
 {
 	static func formPost(url: URL, fields: [String: Any]) -> URLRequest
 	{
-		var request = URLRequest.init(url: url, timeoutInterval: 3.0)
+		var request = URLRequest.init(url: url, timeoutInterval: 10.0)
 		request.httpMethod = "POST"
 		request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 		
