@@ -19,7 +19,7 @@ enum TranslatedTerm
 }
 
 /// A translation from a term into another langauge.
-struct Translation
+struct Translation: TranslationType
 {
 	/// A comment to help the translator
 	var comment: String?
@@ -31,118 +31,135 @@ struct Translation
 	var translated: TranslatedTerm
 }
 
-/// Writing files representing the strings and stringsdict entries
-func writeFile(name: String, translations: [Translation], to url: URL) throws
+/// Private protocol to allow constraining Array extension below
+protocol TranslationType
 {
-	let fileManager = FileManager.default
+	/// A comment to help the translator
+	var comment: String? { get }
 	
-	if !fileManager.fileExists(atPath: url.path)
+	/// The original term/token
+	var term: String { get }
+	
+	/// The translation
+	var translated: TranslatedTerm { get }
+}
+
+/// An Array of Translations can be written to a file
+extension Array where Element: TranslationType
+{
+	/// Writing files representing the strings and stringsdict entries
+	func writeFile(name: String, to url: URL) throws
 	{
-		try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
-	}
-	
-	var fileName = (name as NSString).lastPathComponent
-	
-	if fileName.isEmpty
-	{
-		fileName = "Localizable"
-	}
-	
-	guard !(fileName as NSString).pathExtension.isEmpty else
-	{
-		return
-	}
-	
-	let justName = (fileName as NSString).deletingPathExtension
-	
-	var tmpStr = ""
-	
-	for transUnit in translations
-	{
-		if !tmpStr.isEmpty
+		let fileManager = FileManager.default
+		
+		if !fileManager.fileExists(atPath: url.path)
 		{
-			tmpStr += "\n"
+			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
 		}
 		
-		if let note = transUnit.comment, !note.isEmpty
+		var fileName = (name as NSString).lastPathComponent
+		
+		if fileName.isEmpty
 		{
-			let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
-			tmpStr += "/* \(noteWithLinebreaks) */\n"
+			fileName = "Localizable"
 		}
 		
-		// escape double quotes to be safe
-		
-		var translatedTerm: String!
-		
-		switch transUnit.translated
+		guard !(fileName as NSString).pathExtension.isEmpty else
 		{
+			return
+		}
+		
+		let justName = (fileName as NSString).deletingPathExtension
+		
+		var tmpStr = ""
+		
+		for transUnit in self
+		{
+			if !tmpStr.isEmpty
+			{
+				tmpStr += "\n"
+			}
+			
+			if let note = transUnit.comment, !note.isEmpty
+			{
+				let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
+				tmpStr += "/* \(noteWithLinebreaks) */\n"
+			}
+			
+			// escape double quotes to be safe
+			
+			var translatedTerm: String!
+			
+			switch transUnit.translated
+			{
 			case .hasDefinition(let translation):
 				translatedTerm = translation ?? transUnit.term
-			
+				
 			case .hasPlurals(let plurals):
 				translatedTerm = plurals["other"] ?? transUnit.term
+			}
+			
+			let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
+			
+			tmpStr += "\"\(transUnit.term)\" = \"\(cleanTranslation)\";\n"
 		}
 		
-		let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
+		let outputName = justName + ".strings"
+		let outputPath = (url.path as NSString).appendingPathComponent(outputName)
 		
-		tmpStr += "\"\(transUnit.term)\" = \"\(cleanTranslation)\";\n"
-	}
-	
-	let outputName = justName + ".strings"
-	let outputPath = (url.path as NSString).appendingPathComponent(outputName)
-	
-	try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
-	
-	print("\t\(outputName) ✓")
-	
-	let stringsDictItems = translations.filter { (translation) -> Bool in
+		try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
 		
-		if case .hasPlurals(_) = translation.translated
-		{
-			return true
-		}
+		print("\t\(outputName) ✓")
 		
-		return false
-	}
-	
-	if stringsDictItems.count > 0
-	{
-		var outputDict = [String: Any]()
-		
-		for translation in stringsDictItems
-		{
-			var itemDict = [String: Any]()
+		let stringsDictItems = self.filter { (translation) -> Bool in
 			
-			itemDict["NSStringLocalizedFormatKey"] = "%#@items@"
-			
-			var pluralsDict = [String: Any]()
-			
-			pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
-			pluralsDict["NSStringFormatValueTypeKey"] = "d"
-			
-			switch translation.translated
+			if case .hasPlurals(_) = translation.translated
 			{
+				return true
+			}
+			
+			return false
+		}
+		
+		if stringsDictItems.count > 0
+		{
+			var outputDict = [String: Any]()
+			
+			for translation in stringsDictItems
+			{
+				var itemDict = [String: Any]()
+				
+				itemDict["NSStringLocalizedFormatKey"] = "%#@items@"
+				
+				var pluralsDict = [String: Any]()
+				
+				pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
+				pluralsDict["NSStringFormatValueTypeKey"] = "d"
+				
+				switch translation.translated
+				{
 				case .hasDefinition(_):
 					preconditionFailure()
-				
+					
 				case .hasPlurals(let plurals):
 					for key in plurals.keys.sorted()
 					{
 						let form = plurals[key]!
 						pluralsDict[key] = form
 					}
+				}
+				
+				itemDict["items"] = pluralsDict
+				
+				outputDict[translation.term] = itemDict
 			}
 			
-			itemDict["items"] = pluralsDict
+			let outputName = justName + ".stringsdict"
+			let outputPath = (url.path as NSString).appendingPathComponent(outputName)
 			
-			outputDict[translation.term] = itemDict
+			(outputDict as NSDictionary).write(toFile: outputPath, atomically: true)
+			
+			print("\t\(outputName) ✓")
 		}
-		
-		let outputName = justName + ".stringsdict"
-		let outputPath = (url.path as NSString).appendingPathComponent(outputName)
-		
-		(outputDict as NSDictionary).write(toFile: outputPath, atomically: true)
-		
-		print("\t\(outputName) ✓")
 	}
 }

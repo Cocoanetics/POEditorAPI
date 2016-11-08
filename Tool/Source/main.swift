@@ -294,7 +294,7 @@ for code in settings.languages.sorted()
 					{
 						guard let translations = contexts[key] else { continue }
 						
-						try writeFile(name: key, translations: translations, to: outputFolderURL)
+						try translations.writeFile(name: key, to: outputFolderURL)
 					}
 					
 					print("")

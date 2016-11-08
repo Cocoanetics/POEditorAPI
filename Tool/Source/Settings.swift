@@ -37,6 +37,15 @@ struct Settings
 			isDirty = true
 		}
 	}
+	
+	/// The path relative to the CWD where exporting outputs to
+	var outputFolder: String?
+	{
+		didSet
+		{
+			isDirty = true
+		}
+	}
 
 	/// Keeps track of modifications
 	var isDirty = false
@@ -62,6 +71,7 @@ struct Settings
 				token = settings["token"] as? String
 				projectID = settings["projectID"] as? Int
 				languages = settings["languages"] as? [String]
+				outputFolder = settings["outputFolder"] as? String
 			}
 		}
 		catch _
@@ -78,9 +88,12 @@ struct Settings
 		let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 		let settingsFileURL = workingDirURL.appendingPathComponent("poet.json")
 
-		let dict = ["token": token,
+		var dict = ["token": token,
 		            "projectID": projectID,
 		            "languages": languages] as [String : Any]
+		
+		dict["outputFolder"] = outputFolder
+		
 		let data = try JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted])
 		try data.write(to: settingsFileURL)
 		
