@@ -15,8 +15,6 @@
 		A7D0D3221DD1C8B70088E04A /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3211DD1C8B70088E04A /* Translation.swift */; };
 		A7D0D3241DD1CFC50088E04A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3231DD1CFC50088E04A /* Settings.swift */; };
 		A7D0D3261DD1E5240088E04A /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3251DD1E5240088E04A /* Functions.swift */; };
-		A7F7568D1DD20ACA00B13EDA /* POEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = A7F7568B1DD20ACA00B13EDA /* POEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A7F7569A1DD20AE600B13EDA /* POEditor (iOS).h in Headers */ = {isa = PBXBuildFile; fileRef = A7F756981DD20AE600B13EDA /* POEditor (iOS).h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7F7569E1DD20B2700B13EDA /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AA1DD07E190088E04A /* POEditor.swift */; };
 		A7F7569F1DD20B2700B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */; };
 		A7F756A01DD20B2700B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */; };
@@ -52,11 +50,7 @@
 		A7D0D3231DD1CFC50088E04A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A7D0D3251DD1E5240088E04A /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		A7F756891DD20ACA00B13EDA /* POEditorAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = POEditorAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7F7568B1DD20ACA00B13EDA /* POEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = POEditor.h; sourceTree = "<group>"; };
-		A7F7568C1DD20ACA00B13EDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7F756961DD20AE600B13EDA /* POEditorAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = POEditorAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7F756981DD20AE600B13EDA /* POEditor (iOS).h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "POEditor (iOS).h"; sourceTree = "<group>"; };
-		A7F756991DD20AE600B13EDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7F756A61DD20B3800B13EDA /* POEditorAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POEditorAPI.h; sourceTree = "<group>"; };
 		A7F756A91DD20B6100B13EDA /* Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,8 +85,6 @@
 			children = (
 				A7D0D2A81DD07E190088E04A /* POEditorAPI */,
 				A7D0D2AE1DD07E190088E04A /* Tool */,
-				A7F7568A1DD20ACA00B13EDA /* POEditor */,
-				A7F756971DD20AE600B13EDA /* POEditor (iOS) */,
 				A790D6961DCDF35F0060C52B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -147,24 +139,6 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		A7F7568A1DD20ACA00B13EDA /* POEditor */ = {
-			isa = PBXGroup;
-			children = (
-				A7F7568B1DD20ACA00B13EDA /* POEditor.h */,
-				A7F7568C1DD20ACA00B13EDA /* Info.plist */,
-			);
-			path = POEditor;
-			sourceTree = "<group>";
-		};
-		A7F756971DD20AE600B13EDA /* POEditor (iOS) */ = {
-			isa = PBXGroup;
-			children = (
-				A7F756981DD20AE600B13EDA /* POEditor (iOS).h */,
-				A7F756991DD20AE600B13EDA /* Info.plist */,
-			);
-			path = "POEditor (iOS)";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -173,7 +147,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7F756A71DD20B3800B13EDA /* POEditorAPI.h in Headers */,
-				A7F7568D1DD20ACA00B13EDA /* POEditor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +155,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7F756A81DD20B3800B13EDA /* POEditorAPI.h in Headers */,
-				A7F7569A1DD20AE600B13EDA /* POEditor (iOS).h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
