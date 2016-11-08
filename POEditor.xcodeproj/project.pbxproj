@@ -8,23 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		A7D0D2C11DD07EE30088E04A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2B01DD07E190088E04A /* main.swift */; };
-		A7D0D2C21DD07EE60088E04A /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AA1DD07E190088E04A /* POEditor.swift */; };
-		A7D0D2C31DD07EE60088E04A /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */; };
-		A7D0D2C41DD07EE60088E04A /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */; };
-		A7D0D2C51DD07EE60088E04A /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AD1DD07E190088E04A /* WebService.swift */; };
 		A7D0D3221DD1C8B70088E04A /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3211DD1C8B70088E04A /* Translation.swift */; };
 		A7D0D3241DD1CFC50088E04A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3231DD1CFC50088E04A /* Settings.swift */; };
 		A7D0D3261DD1E5240088E04A /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3251DD1E5240088E04A /* Functions.swift */; };
-		A7F7569E1DD20B2700B13EDA /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AA1DD07E190088E04A /* POEditor.swift */; };
-		A7F7569F1DD20B2700B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */; };
-		A7F756A01DD20B2700B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */; };
-		A7F756A11DD20B2700B13EDA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AD1DD07E190088E04A /* WebService.swift */; };
-		A7F756A21DD20B2800B13EDA /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AA1DD07E190088E04A /* POEditor.swift */; };
-		A7F756A31DD20B2800B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */; };
-		A7F756A41DD20B2800B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */; };
-		A7F756A51DD20B2800B13EDA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AD1DD07E190088E04A /* WebService.swift */; };
-		A7F756A71DD20B3800B13EDA /* POEditorAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = A7F756A61DD20B3800B13EDA /* POEditorAPI.h */; };
-		A7F756A81DD20B3800B13EDA /* POEditorAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = A7F756A61DD20B3800B13EDA /* POEditorAPI.h */; };
+		A7F756B41DD2230800B13EDA /* POEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756AF1DD2230800B13EDA /* POEditor.swift */; };
+		A7F756B51DD2230800B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B11DD2230800B13EDA /* URLRequest+WebService.swift */; };
+		A7F756B61DD2230800B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B21DD2230800B13EDA /* URLSession+WebService.swift */; };
+		A7F756B71DD2230800B13EDA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B31DD2230800B13EDA /* WebService.swift */; };
+		A7F756B81DD2231600B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B11DD2230800B13EDA /* URLRequest+WebService.swift */; };
+		A7F756B91DD2231600B13EDA /* URLRequest+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B11DD2230800B13EDA /* URLRequest+WebService.swift */; };
+		A7F756BA1DD2231900B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B21DD2230800B13EDA /* URLSession+WebService.swift */; };
+		A7F756BB1DD2231900B13EDA /* URLSession+WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B21DD2230800B13EDA /* URLSession+WebService.swift */; };
+		A7F756BC1DD2231B00B13EDA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B31DD2230800B13EDA /* WebService.swift */; };
+		A7F756BD1DD2231C00B13EDA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F756B31DD2230800B13EDA /* WebService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,10 +36,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A7D0D2AA1DD07E190088E04A /* POEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POEditor.swift; sourceTree = "<group>"; };
-		A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLRequest+WebService.swift"; sourceTree = "<group>"; };
-		A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+WebService.swift"; sourceTree = "<group>"; };
-		A7D0D2AD1DD07E190088E04A /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		A7D0D2B01DD07E190088E04A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		A7D0D2BA1DD07ECA0088E04A /* poet */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = poet; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7D0D3211DD1C8B70088E04A /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
@@ -51,8 +43,12 @@
 		A7D0D3251DD1E5240088E04A /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		A7F756891DD20ACA00B13EDA /* POEditorAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = POEditorAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7F756961DD20AE600B13EDA /* POEditorAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = POEditorAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7F756A61DD20B3800B13EDA /* POEditorAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POEditorAPI.h; sourceTree = "<group>"; };
-		A7F756A91DD20B6100B13EDA /* Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
+		A7F756AD1DD2230800B13EDA /* Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
+		A7F756AF1DD2230800B13EDA /* POEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POEditor.swift; sourceTree = "<group>"; };
+		A7F756B01DD2230800B13EDA /* POEditorAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POEditorAPI.h; sourceTree = "<group>"; };
+		A7F756B11DD2230800B13EDA /* URLRequest+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLRequest+WebService.swift"; sourceTree = "<group>"; };
+		A7F756B21DD2230800B13EDA /* URLSession+WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+WebService.swift"; sourceTree = "<group>"; };
+		A7F756B31DD2230800B13EDA /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +79,7 @@
 		A790D68C1DCDF35F0060C52B = {
 			isa = PBXGroup;
 			children = (
-				A7D0D2A81DD07E190088E04A /* POEditorAPI */,
+				A7F756AC1DD2230800B13EDA /* Core */,
 				A7D0D2AE1DD07E190088E04A /* Tool */,
 				A790D6961DCDF35F0060C52B /* Products */,
 			);
@@ -97,27 +93,6 @@
 				A7F756961DD20AE600B13EDA /* POEditorAPI.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A7D0D2A81DD07E190088E04A /* POEditorAPI */ = {
-			isa = PBXGroup;
-			children = (
-				A7F756A91DD20B6100B13EDA /* Framework-Info.plist */,
-				A7D0D2A91DD07E190088E04A /* Source */,
-			);
-			path = POEditorAPI;
-			sourceTree = "<group>";
-		};
-		A7D0D2A91DD07E190088E04A /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				A7F756A61DD20B3800B13EDA /* POEditorAPI.h */,
-				A7D0D2AA1DD07E190088E04A /* POEditor.swift */,
-				A7D0D2AB1DD07E190088E04A /* URLRequest+WebService.swift */,
-				A7D0D2AC1DD07E190088E04A /* URLSession+WebService.swift */,
-				A7D0D2AD1DD07E190088E04A /* WebService.swift */,
-			);
-			path = Source;
 			sourceTree = "<group>";
 		};
 		A7D0D2AE1DD07E190088E04A /* Tool */ = {
@@ -139,6 +114,27 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		A7F756AC1DD2230800B13EDA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A7F756AD1DD2230800B13EDA /* Framework-Info.plist */,
+				A7F756AE1DD2230800B13EDA /* Source */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A7F756AE1DD2230800B13EDA /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				A7F756AF1DD2230800B13EDA /* POEditor.swift */,
+				A7F756B01DD2230800B13EDA /* POEditorAPI.h */,
+				A7F756B11DD2230800B13EDA /* URLRequest+WebService.swift */,
+				A7F756B21DD2230800B13EDA /* URLSession+WebService.swift */,
+				A7F756B31DD2230800B13EDA /* WebService.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -146,7 +142,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7F756A71DD20B3800B13EDA /* POEditorAPI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +149,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7F756A81DD20B3800B13EDA /* POEditorAPI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,9 +172,9 @@
 			productReference = A7D0D2BA1DD07ECA0088E04A /* poet */;
 			productType = "com.apple.product-type.tool";
 		};
-		A7F756881DD20ACA00B13EDA /* POEditor (macOS) */ = {
+		A7F756881DD20ACA00B13EDA /* POEditorAPI (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A7F756901DD20ACA00B13EDA /* Build configuration list for PBXNativeTarget "POEditor (macOS)" */;
+			buildConfigurationList = A7F756901DD20ACA00B13EDA /* Build configuration list for PBXNativeTarget "POEditorAPI (macOS)" */;
 			buildPhases = (
 				A7F756841DD20ACA00B13EDA /* Sources */,
 				A7F756851DD20ACA00B13EDA /* Frameworks */,
@@ -191,14 +185,14 @@
 			);
 			dependencies = (
 			);
-			name = "POEditor (macOS)";
+			name = "POEditorAPI (macOS)";
 			productName = POEditor;
 			productReference = A7F756891DD20ACA00B13EDA /* POEditorAPI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		A7F756951DD20AE600B13EDA /* POEditor (iOS) */ = {
+		A7F756951DD20AE600B13EDA /* POEditorAPI (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A7F7569B1DD20AE600B13EDA /* Build configuration list for PBXNativeTarget "POEditor (iOS)" */;
+			buildConfigurationList = A7F7569B1DD20AE600B13EDA /* Build configuration list for PBXNativeTarget "POEditorAPI (iOS)" */;
 			buildPhases = (
 				A7F756911DD20AE600B13EDA /* Sources */,
 				A7F756921DD20AE600B13EDA /* Frameworks */,
@@ -209,7 +203,7 @@
 			);
 			dependencies = (
 			);
-			name = "POEditor (iOS)";
+			name = "POEditorAPI (iOS)";
 			productName = "POEditor (iOS)";
 			productReference = A7F756961DD20AE600B13EDA /* POEditorAPI.framework */;
 			productType = "com.apple.product-type.framework";
@@ -241,7 +235,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A790D6901DCDF35F0060C52B /* Build configuration list for PBXProject "POET" */;
+			buildConfigurationList = A790D6901DCDF35F0060C52B /* Build configuration list for PBXProject "POEditor" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -254,8 +248,8 @@
 			projectRoot = "";
 			targets = (
 				A7D0D2B91DD07ECA0088E04A /* Tool */,
-				A7F756881DD20ACA00B13EDA /* POEditor (macOS) */,
-				A7F756951DD20AE600B13EDA /* POEditor (iOS) */,
+				A7F756881DD20ACA00B13EDA /* POEditorAPI (macOS) */,
+				A7F756951DD20AE600B13EDA /* POEditorAPI (iOS) */,
 			);
 		};
 /* End PBXProject section */
@@ -282,14 +276,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7D0D2C51DD07EE60088E04A /* WebService.swift in Sources */,
-				A7D0D2C31DD07EE60088E04A /* URLRequest+WebService.swift in Sources */,
-				A7D0D2C21DD07EE60088E04A /* POEditor.swift in Sources */,
 				A7D0D3261DD1E5240088E04A /* Functions.swift in Sources */,
+				A7F756B61DD2230800B13EDA /* URLSession+WebService.swift in Sources */,
+				A7F756B71DD2230800B13EDA /* WebService.swift in Sources */,
 				A7D0D2C11DD07EE30088E04A /* main.swift in Sources */,
+				A7F756B51DD2230800B13EDA /* URLRequest+WebService.swift in Sources */,
 				A7D0D3241DD1CFC50088E04A /* Settings.swift in Sources */,
-				A7D0D2C41DD07EE60088E04A /* URLSession+WebService.swift in Sources */,
 				A7D0D3221DD1C8B70088E04A /* Translation.swift in Sources */,
+				A7F756B41DD2230800B13EDA /* POEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,10 +291,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7F756A31DD20B2800B13EDA /* URLRequest+WebService.swift in Sources */,
-				A7F756A41DD20B2800B13EDA /* URLSession+WebService.swift in Sources */,
-				A7F756A51DD20B2800B13EDA /* WebService.swift in Sources */,
-				A7F756A21DD20B2800B13EDA /* POEditor.swift in Sources */,
+				A7F756BD1DD2231C00B13EDA /* WebService.swift in Sources */,
+				A7F756B81DD2231600B13EDA /* URLRequest+WebService.swift in Sources */,
+				A7F756BB1DD2231900B13EDA /* URLSession+WebService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,10 +301,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7F7569F1DD20B2700B13EDA /* URLRequest+WebService.swift in Sources */,
-				A7F756A01DD20B2700B13EDA /* URLSession+WebService.swift in Sources */,
-				A7F756A11DD20B2700B13EDA /* WebService.swift in Sources */,
-				A7F7569E1DD20B2700B13EDA /* POEditor.swift in Sources */,
+				A7F756BC1DD2231B00B13EDA /* WebService.swift in Sources */,
+				A7F756B91DD2231600B13EDA /* URLRequest+WebService.swift in Sources */,
+				A7F756BA1DD2231900B13EDA /* URLSession+WebService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +430,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "POEditorAPI/Framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Core/Framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -464,7 +456,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "POEditorAPI/Framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Core/Framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -489,7 +481,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "POEditorAPI/Framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Core/Framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -516,7 +508,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "POEditorAPI/Framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Core/Framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -536,7 +528,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A790D6901DCDF35F0060C52B /* Build configuration list for PBXProject "POET" */ = {
+		A790D6901DCDF35F0060C52B /* Build configuration list for PBXProject "POEditor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A790D69A1DCDF35F0060C52B /* Debug */,
@@ -554,21 +546,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A7F756901DD20ACA00B13EDA /* Build configuration list for PBXNativeTarget "POEditor (macOS)" */ = {
+		A7F756901DD20ACA00B13EDA /* Build configuration list for PBXNativeTarget "POEditorAPI (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A7F7568E1DD20ACA00B13EDA /* Debug */,
 				A7F7568F1DD20ACA00B13EDA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		A7F7569B1DD20AE600B13EDA /* Build configuration list for PBXNativeTarget "POEditor (iOS)" */ = {
+		A7F7569B1DD20AE600B13EDA /* Build configuration list for PBXNativeTarget "POEditorAPI (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A7F7569C1DD20AE600B13EDA /* Debug */,
 				A7F7569D1DD20AE600B13EDA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
