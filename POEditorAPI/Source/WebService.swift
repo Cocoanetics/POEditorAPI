@@ -6,7 +6,7 @@
 //  Copyright © 2016 Cocoanetics. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 
 /// The result of a web service request
 enum WebServiceResult<T>
