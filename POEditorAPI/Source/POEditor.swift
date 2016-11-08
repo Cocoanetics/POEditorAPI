@@ -40,7 +40,7 @@ class POEditor: WebService
 	}()
 	
 	/// API Token to pass with all requests
-	var token: String //= "ea5a73dbeea02e992e36671d437679d9";
+	var token: String
 	
 	required init(token: String)
 	{
