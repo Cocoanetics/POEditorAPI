@@ -10,43 +10,22 @@ import Foundation
 
 let sema = DispatchSemaphore(value: 0)
 
-var token: String!
-var projectID: Int!
-var languages: [String]!
-
-let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-let settingsFileURL = workingDirURL.appendingPathComponent("poet.json")
-var settingsNeedSaving = false
-
-do
-{
-	let data = try Data(contentsOf: settingsFileURL)
-
-	if let settings = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-	{
-		token = settings["token"] as? String
-		projectID = settings["projectID"] as? Int
-		languages = settings["languages"] as? [String]
-	}
-}
-catch _
-{
-	
-}
+// load settings from CWD if present
+var settings = Settings()
 
 // get token from user if needed
-if token == nil
+if settings.token == nil
 {
 	// no api token
 	print("Enter POEditor API Token> ", terminator: "")
-	token = readLine(strippingNewline: true)
-	settingsNeedSaving = true
+	settings.token = readLine(strippingNewline: true)
 }
 
+// Set up API
+let poeditor = POEditor(token: settings.token)
 
-let poeditor = POEditor(token: token)
-
-if projectID == nil
+// Show projects to select
+if settings.projectID == nil
 {
 	var availableProjects: [JSONDictionary]!
 	
@@ -104,8 +83,7 @@ if projectID == nil
 		let number = Int(string)
 	{
 		let project = availableProjects[number-1]
-		projectID = Int((project["id"] as! String))
-		settingsNeedSaving = true
+		settings.projectID = Int((project["id"] as! String))
 	}
 	else
 	{
@@ -114,11 +92,12 @@ if projectID == nil
 	}
 }
 
-if languages == nil
+// Show languages to select
+if settings.languages == nil
 {
 	var projectLanguages: [JSONDictionary]!
 	
-	poeditor.listProjectLanguages(projectID: projectID) { result in
+	poeditor.listProjectLanguages(projectID: settings.projectID) { result in
 		
 		switch result
 		{
@@ -145,34 +124,61 @@ if languages == nil
 	
 	sema.wait()
 	
-	let completeLangs = projectLanguages.filter { (language) -> Bool in
-		if let percent = language["percentage"] as? Int, percent == 100
+	print("\nLanguages Available")
+	print("=====================")
+	
+	for (index, language) in projectLanguages.enumerated()
+	{
+		guard let code = language["code"] as? String,
+			let name = language["name"] as? String,
+			let percentComplete = language["percentage"] as? Double else
 		{
-			return true
+			continue
 		}
 		
-		return false
+		let indexStr = String(format: "%3d", index+1)
+		
+		let codeFormat = code.padding(toLength: 5, withPad: " ", startingAt: 0)
+		
+		print("\t" + codeFormat + "\t" + name + " (\(percentComplete)%)")
 	}
 	
-	let languageCodes = completeLangs.map { (language) -> String in
-		return language["code"] as! String
-	}
+	print("\nSelect percent threshold to setup> ", terminator: "")
 	
-	languages = languageCodes
-	settingsNeedSaving = true
+	if let string = readLine(strippingNewline: true),
+		let threshold = Double(string)
+	{
+		let selectedLangs = projectLanguages.filter { (language) -> Bool in
+			if let percent = language["percentage"] as? Double, percent >= threshold
+			{
+				return true
+			}
+			
+			return false
+		}
+		
+		if selectedLangs.count > 0
+		{
+			settings.languages = selectedLangs.map { (language) -> String in
+				return language["code"] as! String
+			}
+		}
+	}
+}
+
+if settings.languages == nil || settings.languages?.count == 0
+{
+	print("No languages selected, aborting.")
+	exit(1)
 }
 
 // save project settings
 
-if settingsNeedSaving
+if settings.isDirty
 {
 	do
 	{
-		let dict = ["token": token, "projectID": projectID, "languages": languages] as [String : Any]
-		let data = try JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted])
-		try data.write(to: settingsFileURL)
-		
-		print("Project settings aved in " + settingsFileURL.path)
+		try settings.save()
 	}
 	catch let error
 	{
@@ -183,11 +189,12 @@ if settingsNeedSaving
 	print("Setup complete. You may edit the config file poet.json to change the imported languages.\n")
 }
 
+let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let exportFolderURL = workingDirURL.appendingPathComponent("POEditor", isDirectory: true)
 
 let fileManager = FileManager.default
 
-for code in languages.sorted()
+for code in settings.languages.sorted()
 {
 	print("Exporting " + code + "...", terminator:"")
 	
@@ -228,7 +235,7 @@ for code in languages.sorted()
 	
 	var exportError: Error?
 	
-	poeditor.exportProjectTranslation(projectID: projectID, languageCode: code, type: .json) { (result) in
+	poeditor.exportProjectTranslation(projectID: settings.projectID, languageCode: code, type: .json) { (result) in
 		
 		switch result
 		{
@@ -264,7 +271,7 @@ for code in languages.sorted()
 						}
 						else
 						{
-							preconditionFailure()
+							translated = TranslatedTerm.hasDefinition(nil)
 						}
 						
 						let comment = translation["comment"] as? String
