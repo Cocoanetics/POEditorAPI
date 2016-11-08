@@ -203,10 +203,20 @@ if settings.isDirty
 	print("Setup complete. You may edit the config file poet.json to change the imported languages.\n")
 }
 
+// determine output folder: default, relative or absolute
 
-let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+var exportFolderURL: URL
 let outputFolder = settings.outputFolder ?? "POEditor"
-let exportFolderURL = workingDirURL.appendingPathComponent(outputFolder, isDirectory: true)
+
+if outputFolder.hasPrefix("/")
+{
+	exportFolderURL = URL(fileURLWithPath: outputFolder)
+}
+else
+{
+	let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+	exportFolderURL = workingDirURL.appendingPathComponent(outputFolder, isDirectory: true)
+}
 
 let langStr = (settings.languages.count == 1) ? "One language" : String(format: "%ld languages", settings.languages.count)
 
@@ -218,7 +228,7 @@ for code in settings.languages.sorted()
 {
 	let xcode = xCodeLocaleFromPOEditorCode(code: code)
 
-	print("Exporting " + Locale(identifier: "en").localizedString(forIdentifier: xcode)! + " (" + xcode + ")...")
+	print("Exporting " + Locale(identifier: "en").localizedString(forIdentifier: xcode)! + " [" + xcode + "]...")
 	
 	let outputFileURL = exportFolderURL.appendingPathComponent(xcode + ".json")
 	let outputFolderURL = exportFolderURL.appendingPathComponent(xcode + ".lproj", isDirectory: true)

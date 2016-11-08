@@ -75,30 +75,34 @@ extension Array where Element: TranslationType
 		
 		for transUnit in self
 		{
+			var translatedTerm: String!
+			
+			switch transUnit.translated
+			{
+				case .hasDefinition(let translation):
+					translatedTerm = translation
+				
+				case .hasPlurals(let plurals):
+					translatedTerm = plurals["other"]
+			}
+			
+			if translatedTerm == nil
+			{
+				continue
+			}
+			
 			if !tmpStr.isEmpty
 			{
 				tmpStr += "\n"
 			}
-			
+
 			if let note = transUnit.comment, !note.isEmpty
 			{
 				let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
 				tmpStr += "/* \(noteWithLinebreaks) */\n"
 			}
-			
+
 			// escape double quotes to be safe
-			
-			var translatedTerm: String!
-			
-			switch transUnit.translated
-			{
-			case .hasDefinition(let translation):
-				translatedTerm = translation ?? transUnit.term
-				
-			case .hasPlurals(let plurals):
-				translatedTerm = plurals["other"] ?? transUnit.term
-			}
-			
 			let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
 			
 			tmpStr += "\"\(transUnit.term)\" = \"\(cleanTranslation)\";\n"
@@ -109,7 +113,7 @@ extension Array where Element: TranslationType
 		
 		try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
 		
-		print("\t\(outputName) ✓")
+		print("\t✓ " + outputName)
 		
 		let stringsDictItems = self.filter { (translation) -> Bool in
 			
@@ -159,7 +163,7 @@ extension Array where Element: TranslationType
 			
 			(outputDict as NSDictionary).write(toFile: outputPath, atomically: true)
 			
-			print("\t\(outputName) ✓")
+			print("\t✓ " + outputName)
 		}
 	}
 }
