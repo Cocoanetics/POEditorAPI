@@ -14,6 +14,7 @@
 		A7D0D2C51DD07EE60088E04A /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D2AD1DD07E190088E04A /* WebService.swift */; };
 		A7D0D3221DD1C8B70088E04A /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3211DD1C8B70088E04A /* Translation.swift */; };
 		A7D0D3241DD1CFC50088E04A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3231DD1CFC50088E04A /* Settings.swift */; };
+		A7D0D3261DD1E5240088E04A /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0D3251DD1E5240088E04A /* Functions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,7 @@
 		A7D0D2BA1DD07ECA0088E04A /* poet */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = poet; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7D0D3211DD1C8B70088E04A /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		A7D0D3231DD1CFC50088E04A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		A7D0D3251DD1E5240088E04A /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				A7D0D2B01DD07E190088E04A /* main.swift */,
 				A7D0D3211DD1C8B70088E04A /* Translation.swift */,
 				A7D0D3231DD1CFC50088E04A /* Settings.swift */,
+				A7D0D3251DD1E5240088E04A /* Functions.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				A7D0D2C51DD07EE60088E04A /* WebService.swift in Sources */,
 				A7D0D2C31DD07EE60088E04A /* URLRequest+WebService.swift in Sources */,
 				A7D0D2C21DD07EE60088E04A /* POEditor.swift in Sources */,
+				A7D0D3261DD1E5240088E04A /* Functions.swift in Sources */,
 				A7D0D2C11DD07EE30088E04A /* main.swift in Sources */,
 				A7D0D3241DD1CFC50088E04A /* Settings.swift in Sources */,
 				A7D0D2C41DD07EE60088E04A /* URLSession+WebService.swift in Sources */,

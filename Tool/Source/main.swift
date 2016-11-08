@@ -13,6 +13,10 @@ let sema = DispatchSemaphore(value: 0)
 // load settings from CWD if present
 var settings = Settings()
 
+print("POEditor Tool (POET)")
+print("====================")
+
+
 // get token from user if needed
 if settings.token == nil
 {
@@ -63,7 +67,7 @@ if settings.projectID == nil
 	}
 	
 	print("\nProjects Available")
-	print("==================")
+	print("------------------")
 	
 	for (index, project) in availableProjects.enumerated()
 	{
@@ -125,7 +129,7 @@ if settings.languages == nil
 	sema.wait()
 	
 	print("\nLanguages Available")
-	print("=====================")
+	print("-------------------")
 	
 	for (index, language) in projectLanguages.enumerated()
 	{
@@ -172,6 +176,16 @@ if settings.languages == nil || settings.languages?.count == 0
 	exit(1)
 }
 
+if settings.outputFolder == nil
+{
+	print("\nSpecify output folder> ", terminator: "")
+	
+	if let folder = readLine(strippingNewline: true)
+	{
+		settings.outputFolder = folder
+	}
+}
+
 // save project settings
 
 if settings.isDirty
@@ -189,34 +203,23 @@ if settings.isDirty
 	print("Setup complete. You may edit the config file poet.json to change the imported languages.\n")
 }
 
+
 let workingDirURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-let exportFolderURL = workingDirURL.appendingPathComponent("POEditor", isDirectory: true)
+let outputFolder = settings.outputFolder ?? "POEditor"
+let exportFolderURL = workingDirURL.appendingPathComponent(outputFolder, isDirectory: true)
+
+let langStr = (settings.languages.count == 1) ? "One language" : String(format: "%ld languages", settings.languages.count)
+
+print("\(langStr) will be exported to " + exportFolderURL.path + "\n")
 
 let fileManager = FileManager.default
 
 for code in settings.languages.sorted()
 {
-	print("Exporting " + code + "...", terminator:"")
-	
-	var xcode = code
-	
-	if xcode == "zh-CN"
-	{
-		xcode = "zh-Hans"
-	}
-	else if xcode == "zh-TW"
-	{
-		xcode = "zh-Hant"
-	}
-	else if xcode == "en-us"
-	{
-		xcode = "en"
-	}
-	else if xcode == "pt-br"
-	{
-		xcode = "pt-BR"
-	}
+	let xcode = xCodeLocaleFromPOEditorCode(code: code)
 
+	print("Exporting " + Locale(identifier: "en").localizedString(forIdentifier: xcode)! + " (" + xcode + ")...")
+	
 	let outputFileURL = exportFolderURL.appendingPathComponent(xcode + ".json")
 	let outputFolderURL = exportFolderURL.appendingPathComponent(xcode + ".lproj", isDirectory: true)
 	
@@ -315,7 +318,9 @@ for code in settings.languages.sorted()
 	
 	if let error = exportError
 	{
-		print("Failed")
-		print(error)
+		print("Export Failed:" + error.localizedDescription)
+		exit(1)
 	}
 }
+
+print("Export complete\n\n")
