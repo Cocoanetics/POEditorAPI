@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'Core' do |ss|
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.8'
-    ss.source_files = 'Core/Source/*.{h,swift}'
+    ss.osx.deployment_target = '10.10'
+    ss.source_files = 'Core/Source/*.swift'
   end
 end
