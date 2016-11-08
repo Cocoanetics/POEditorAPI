@@ -8,118 +8,6 @@
 
 import Foundation
 
-struct Translation
-{
-	var term: String
-	var definition: String?
-	var plurals: [String: String]?
-	var comment: String?
-}
-
-private func writeFile(name: String, translations: [Translation], toPath path: String) throws
-{
-	let fileManager = FileManager.default
-	
-	if !fileManager.fileExists(atPath: path)
-	{
-		try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-	}
-	
-	var fileName = (name as NSString).lastPathComponent
-	
-	if fileName.isEmpty
-	{
-		fileName = "Localizable"
-	}
-	
-	guard !(fileName as NSString).pathExtension.isEmpty else
-	{
-		return
-	}
-	
-	let justName = (fileName as NSString).deletingPathExtension
-	
-	var tmpStr = ""
-	
-	for transUnit in translations
-	{
-		if !tmpStr.isEmpty
-		{
-			tmpStr += "\n"
-		}
-		
-		if let note = transUnit.comment, !note.isEmpty
-		{
-			let noteWithLinebreaks = note.replacingOccurrences(of: "\\n", with: "\n", options: [], range: nil)
-			tmpStr += "/* \(noteWithLinebreaks) */\n"
-		}
-		
-		// escape double quotes to be safe
-		
-		var translatedTerm: String!
-		
-		if let plural = transUnit.plurals?["other"]
-		{
-			translatedTerm = plural
-		}
-		else
-		{
-			translatedTerm = transUnit.definition ?? transUnit.term
-		}
-		
-		let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
-		
-		tmpStr += "\"\(transUnit.term)\" = \"\(cleanTranslation)\";\n"
-	}
-	
-	let outputName = justName + ".strings"
-	let outputPath = (path as NSString).appendingPathComponent(outputName)
-	
-	try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
-	
-	print("\t\(outputName) ✓")
-	
-	let stringsDictItems = translations.filter { (translation) -> Bool in
-		return translation.plurals != nil
-	}
-
-	if stringsDictItems.count > 0
-	{
-		var outputDict = [String: Any]()
-		
-		for translation in stringsDictItems
-		{
-			var itemDict = [String: Any]()
-
-			itemDict["NSStringLocalizedFormatKey"] = "%#@items@"
-
-			var pluralsDict = [String: Any]()
-
-			pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
-			pluralsDict["NSStringFormatValueTypeKey"] = "d"
-			
-			for key in translation.plurals!.keys.sorted()
-			{
-				let form = translation.plurals![key]!
-				
-				pluralsDict[key] = form
-			}
-			
-			itemDict["items"] = pluralsDict
-			
-			outputDict[translation.term] = itemDict
-		}
-		
-		let outputName = justName + ".stringsdict"
-		let outputPath = (path as NSString).appendingPathComponent(outputName)
-
-		(outputDict as NSDictionary).write(toFile: outputPath, atomically: true)
-		
-		print("\t\(outputName) ✓")
-	}
-}
-
-
 let sema = DispatchSemaphore(value: 0)
 
 var token: String!
@@ -291,6 +179,8 @@ if settingsNeedSaving
 		print(error)
 		exit(1)
 	}
+	
+	print("Setup complete. You may edit the config file poet.json to change the imported languages.\n")
 }
 
 let exportFolderURL = workingDirURL.appendingPathComponent("POEditor", isDirectory: true)
@@ -362,19 +252,23 @@ for code in languages.sorted()
 							preconditionFailure()
 						}
 						
-						var trans = Translation(term: term, definition: nil, plurals: nil, comment: nil)
+						let translated: TranslatedTerm
 						
 						if let single = translation["definition"] as? String
 						{
-							trans.definition = single
+							translated = TranslatedTerm.hasDefinition(single)
 						}
 						else if let plurals = translation["definition"] as? [String: String]
 						{
-							trans.plurals = plurals
+							translated = TranslatedTerm.hasPlurals(plurals)
+						}
+						else
+						{
+							preconditionFailure()
 						}
 						
-						trans.comment = translation["comment"] as? String
-						
+						let comment = translation["comment"] as? String
+						let trans = Translation(comment: comment, term: term, translated: translated)
 						
 						if var existingTrans = contexts[context]
 						{
@@ -393,7 +287,7 @@ for code in languages.sorted()
 					{
 						guard let translations = contexts[key] else { continue }
 						
-						try writeFile(name: key, translations: translations, toPath: outputFolderURL.path)
+						try writeFile(name: key, translations: translations, to: outputFolderURL)
 					}
 					
 					print("")
