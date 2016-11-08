@@ -195,7 +195,7 @@ if projectID == nil
 		exit(1)
 	}
 	
-	print("Projects Available")
+	print("\nProjects Available")
 	print("==================")
 	
 	for (index, project) in availableProjects.enumerated()
@@ -270,11 +270,8 @@ if languages == nil
 		return language["code"] as! String
 	}
 	
-	if languageCodes != languages
-	{
-		languages = languageCodes
-		settingsNeedSaving = true
-	}
+	languages = languageCodes
+	settingsNeedSaving = true
 }
 
 // save project settings
