@@ -76,11 +76,11 @@ func writeFile(name: String, translations: [Translation], to url: URL) throws
 		
 		switch transUnit.translated
 		{
-		case .hasDefinition(let translation):
-			translatedTerm = translation ?? transUnit.term
+			case .hasDefinition(let translation):
+				translatedTerm = translation ?? transUnit.term
 			
-		case .hasPlurals(let plurals):
-			translatedTerm = plurals["other"] ?? transUnit.term
+			case .hasPlurals(let plurals):
+				translatedTerm = plurals["other"] ?? transUnit.term
 		}
 		
 		let cleanTranslation = translatedTerm.replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")
