@@ -19,7 +19,7 @@ enum TranslatedTerm
 }
 
 /// A translation from a term into another langauge.
-struct Translation: TranslationType
+struct Translation
 {
 	/// A comment to help the translator
 	var comment: String?
@@ -31,21 +31,8 @@ struct Translation: TranslationType
 	var translated: TranslatedTerm
 }
 
-/// Private protocol to allow constraining Array extension below
-protocol TranslationType
-{
-	/// A comment to help the translator
-	var comment: String? { get }
-	
-	/// The original term/token
-	var term: String { get }
-	
-	/// The translation
-	var translated: TranslatedTerm { get }
-}
-
 /// An Array of Translations can be written to a file
-extension Array where Element: TranslationType
+extension Collection where Iterator.Element == Translation
 {
 	/// Writing files representing the strings and stringsdict entries
 	func writeFile(name: String, to url: URL) throws
