@@ -1,3 +1,6 @@
+Please look at the [announcement and video demonstration](https://www.cocoanetics.com/2016/11/introducing-the-poeditor-com-api-and-tool/) at Cocoanetics.com
+
+
 POEditor.com API
 ================
 
