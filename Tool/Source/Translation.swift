@@ -98,9 +98,12 @@ extension Collection where Iterator.Element == Translation
 		let outputName = justName + ".strings"
 		let outputPath = (url.path as NSString).appendingPathComponent(outputName)
 		
-		try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
-		
-		print("\t✓ " + outputName)
+		if !tmpStr.isEmpty
+		{
+			try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
+			
+			print("\t✓ " + outputName)
+		}
 		
 		let stringsDictItems = self.filter { (translation) -> Bool in
 			
