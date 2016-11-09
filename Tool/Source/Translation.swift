@@ -44,14 +44,9 @@ extension Collection where Iterator.Element == Translation
 			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
 		}
 		
-		var fileName = (name as NSString).lastPathComponent
+		let fileName = (name as NSString).lastPathComponent
 		
-		if fileName.isEmpty
-		{
-			fileName = "Localizable"
-		}
-		
-		guard !(fileName as NSString).pathExtension.isEmpty else
+		guard (fileName as NSString).pathExtension == "strings" else
 		{
 			return
 		}
