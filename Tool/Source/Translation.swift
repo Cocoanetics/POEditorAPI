@@ -124,9 +124,6 @@ extension Collection where Iterator.Element == Translation
 				
 				var pluralsDict = [String: Any]()
 				
-				pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
-				pluralsDict["NSStringFormatValueTypeKey"] = "d"
-				
 				switch translation.translated
 				{
 				case .hasDefinition(_):
@@ -135,14 +132,27 @@ extension Collection where Iterator.Element == Translation
 				case .hasPlurals(let plurals):
 					for key in plurals.keys.sorted()
 					{
-						let form = plurals[key]!
-						pluralsDict[key] = form
+						if let form = plurals[key], !form.isEmpty
+						{
+							pluralsDict[key] = form
+						}
 					}
 				}
 				
-				itemDict["items"] = pluralsDict
-				
-				outputDict[translation.term] = itemDict
+				if pluralsDict.count > 0
+				{
+					pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
+					pluralsDict["NSStringFormatValueTypeKey"] = "d"
+					
+					itemDict["items"] = pluralsDict
+					
+					outputDict[translation.term] = itemDict
+				}
+			}
+			
+			guard outputDict.count > 0 else
+			{
+				return
 			}
 			
 			let outputName = justName + ".stringsdict"
