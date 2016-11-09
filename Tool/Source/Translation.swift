@@ -37,18 +37,20 @@ extension Collection where Iterator.Element == Translation
 	/// Writing files representing the strings and stringsdict entries
 	func writeFile(name: String, to url: URL) throws
 	{
-		let fileManager = FileManager.default
-		
-		if !fileManager.fileExists(atPath: url.path)
-		{
-			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
-		}
-		
+		// only output strings files
 		let fileName = (name as NSString).lastPathComponent
 		
 		guard (fileName as NSString).pathExtension == "strings" else
 		{
 			return
+		}
+
+		// create output folder if needed
+		let fileManager = FileManager.default
+		
+		if !fileManager.fileExists(atPath: url.path)
+		{
+			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
 		}
 		
 		let justName = (fileName as NSString).deletingPathExtension
