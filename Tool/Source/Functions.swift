@@ -20,10 +20,6 @@ func xCodeLocaleFromPOEditorCode(code: String) -> String
 	{
 		tmpCode = "zh-Hant"
 	}
-	else if tmpCode == "en-us"
-	{
-		tmpCode = "en"
-	}
 	
 	let locale = Locale(identifier: tmpCode)
 	return locale.identifier
@@ -76,7 +72,7 @@ func processJSON(data: Data, outputFolderURL: URL) throws
 		}
 		else
 		{
-			translated = TranslatedTerm.hasDefinition(nil)
+			translated = TranslatedTerm.notTranslated
 		}
 		
 		let comment = translation["comment"] as? String
