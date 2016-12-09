@@ -11,6 +11,9 @@ import Foundation
 /// A translated term, either with a single definition or multiple plural forms
 enum TranslatedTerm
 {
+	/// if there is no definition for the term
+	case notTranslated
+	
 	/// if there is a single definition for the term
 	case hasDefinition(String?)
 	
@@ -68,11 +71,9 @@ extension Collection where Iterator.Element == Translation
 				
 				case .hasPlurals(let plurals):
 					translatedTerm = plurals["other"]
-			}
-			
-			if translatedTerm == nil
-			{
-				continue
+				
+				case .notTranslated:
+					continue
 			}
 			
 			if !tmpStr.isEmpty
@@ -127,6 +128,9 @@ extension Collection where Iterator.Element == Translation
 				switch translation.translated
 				{
 				case .hasDefinition(_):
+					preconditionFailure()
+					
+				case .notTranslated:
 					preconditionFailure()
 					
 				case .hasPlurals(let plurals):
