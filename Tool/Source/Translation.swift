@@ -11,6 +11,9 @@ import Foundation
 /// A translated term, either with a single definition or multiple plural forms
 enum TranslatedTerm
 {
+	/// if there is no definition for the term
+	case notTranslated
+	
 	/// if there is a single definition for the term
 	case hasDefinition(String?)
 	
@@ -19,7 +22,7 @@ enum TranslatedTerm
 }
 
 /// A translation from a term into another langauge.
-struct Translation: TranslationType
+struct Translation
 {
 	/// A comment to help the translator
 	var comment: String?
@@ -31,42 +34,26 @@ struct Translation: TranslationType
 	var translated: TranslatedTerm
 }
 
-/// Private protocol to allow constraining Array extension below
-protocol TranslationType
-{
-	/// A comment to help the translator
-	var comment: String? { get }
-	
-	/// The original term/token
-	var term: String { get }
-	
-	/// The translation
-	var translated: TranslatedTerm { get }
-}
-
 /// An Array of Translations can be written to a file
-extension Array where Element: TranslationType
+extension Collection where Iterator.Element == Translation
 {
 	/// Writing files representing the strings and stringsdict entries
 	func writeFile(name: String, to url: URL) throws
 	{
+		// only output strings files
+		let fileName = (name as NSString).lastPathComponent
+		
+		guard (fileName as NSString).pathExtension == "strings" else
+		{
+			return
+		}
+
+		// create output folder if needed
 		let fileManager = FileManager.default
 		
 		if !fileManager.fileExists(atPath: url.path)
 		{
 			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
-		}
-		
-		var fileName = (name as NSString).lastPathComponent
-		
-		if fileName.isEmpty
-		{
-			fileName = "Localizable"
-		}
-		
-		guard !(fileName as NSString).pathExtension.isEmpty else
-		{
-			return
 		}
 		
 		let justName = (fileName as NSString).deletingPathExtension
@@ -84,11 +71,9 @@ extension Array where Element: TranslationType
 				
 				case .hasPlurals(let plurals):
 					translatedTerm = plurals["other"]
-			}
-			
-			if translatedTerm == nil
-			{
-				continue
+				
+				case .notTranslated:
+					continue
 			}
 			
 			if !tmpStr.isEmpty
@@ -111,9 +96,12 @@ extension Array where Element: TranslationType
 		let outputName = justName + ".strings"
 		let outputPath = (url.path as NSString).appendingPathComponent(outputName)
 		
-		try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
-		
-		print("\t✓ " + outputName)
+		if !tmpStr.isEmpty
+		{
+			try (tmpStr as NSString).write(toFile: outputPath, atomically: true, encoding: String.Encoding.utf8.rawValue);
+			
+			print("\t✓ " + outputName)
+		}
 		
 		let stringsDictItems = self.filter { (translation) -> Bool in
 			
@@ -137,25 +125,38 @@ extension Array where Element: TranslationType
 				
 				var pluralsDict = [String: Any]()
 				
-				pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
-				pluralsDict["NSStringFormatValueTypeKey"] = "d"
-				
 				switch translation.translated
 				{
 				case .hasDefinition(_):
 					preconditionFailure()
 					
+				case .notTranslated:
+					preconditionFailure()
+					
 				case .hasPlurals(let plurals):
 					for key in plurals.keys.sorted()
 					{
-						let form = plurals[key]!
-						pluralsDict[key] = form
+						if let form = plurals[key], !form.isEmpty
+						{
+							pluralsDict[key] = form
+						}
 					}
 				}
 				
-				itemDict["items"] = pluralsDict
-				
-				outputDict[translation.term] = itemDict
+				if pluralsDict.count > 0
+				{
+					pluralsDict["NSStringFormatSpecTypeKey"] = "NSStringPluralRuleType"
+					pluralsDict["NSStringFormatValueTypeKey"] = "d"
+					
+					itemDict["items"] = pluralsDict
+					
+					outputDict[translation.term] = itemDict
+				}
+			}
+			
+			guard outputDict.count > 0 else
+			{
+				return
 			}
 			
 			let outputName = justName + ".stringsdict"
