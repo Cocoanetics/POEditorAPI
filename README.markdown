@@ -6,23 +6,50 @@ POEditor.com API
 
 An API wrapper written in Swift 3. With it you can add support for POEditor.com to your iOS and macOS apps.
 
-Using with Cocoapods
---------------------
+How to Add to your Project
+--------------------------
 
-You can add the following to your Podfile to include the latest version of POEditor API.
+If you use Cocoapods, you can add the following to your Podfile to include the latest version of POEditor API.
   
 ```
 platform :ios, '8.0'
 
 use_frameworks!
-project './potest.xcodeproj'
+project './project.xcodeproj'
 
-target "potest" do
+target "project" do
 	pod 'POEditorAPI'
 end
 ```
 
+If you use git submodules, then clone the GitHub repo into a sub-folder of your project.
 
+`git clone https://github.com/Cocoanetics/POEditorAPI.git Externals/POEditorAPI`
+
+Embed the POEditor framework for your platform into your app, this should cause Xcode to correctly set up the import of the umbrella header.
+
+Smoke Test
+----------
+
+At the top you `import POEditorAPI`. Then you can instantiate the API passing your token. You can get a POEditor.com API token from your profile settings page.
+
+```
+let poeditor = POEditor(token: "TOKEN")
+poeditor.listProjects { (result) in
+			
+   switch result 
+   {
+      case .success(let projects):
+         print(projects)
+				
+      case .failure(let error):
+         print(error)
+   }
+}
+
+```
+
+The API makes use of the *Result* paradigm which returns either a .success with the result attached or a .failure with the error attached.
 
 
 POEditor Tool (POET)
