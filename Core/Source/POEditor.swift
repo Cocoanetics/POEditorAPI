@@ -8,49 +8,51 @@
 
 import Foundation
 
-typealias JSONDictionary = [String: Any]
+public typealias JSONDictionary = [String: Any]
 
-/// The types of file that translations can be exported in
-enum ExportType: String
+/// A class representing an API to POEditor.com.
+public final class POEditor: WebService
 {
-	case po = "po"
-	case pot = "pot"
-	case mo = "mo"
-	case xls = "xls"
-	case csv = "csv"
-	case resw = "resw"
-	case resx = "resx"
-	case android_strings = "android_strings"
-	case apple_strings = "apple_strings"
-	case xliff = "xliff"
-	case properties = "properties"
-	case key_value_json = "key_value_json"
-	case json = "json"
-}
-
-class POEditor: WebService
-{
+	/// The types of file that translations can be exported in
+	public enum ExportFileType: String
+	{
+		case po = "po"
+		case pot = "pot"
+		case mo = "mo"
+		case xls = "xls"
+		case csv = "csv"
+		case resw = "resw"
+		case resx = "resx"
+		case android_strings = "android_strings"
+		case apple_strings = "apple_strings"
+		case xliff = "xliff"
+		case properties = "properties"
+		case key_value_json = "key_value_json"
+		case json = "json"
+	}
+	
 	// MARK: - Properties
 	/// Specify API endpoint
-	var endpoint = URL(string: "https://poeditor.com/api/")!
+	public let endpoint = URL(string: "https://poeditor.com/api/")!
 	
 	/// Specify ephemeral URL session
-	lazy var session = {
+	public lazy var session = {
 		return URLSession(configuration: .ephemeral)
 	}()
 	
 	/// API Token to pass with all requests
-	var token: String
+	let token: String
 	
-	required init(token: String)
+	required public init(token: String)
 	{
 		self.token = token
 	}
 	
 	// MARK: - Public Interface
 	
-	/// List projects
-	func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
+	/// List projects on POEditor.com
+	/// - parameter completion: The completion block receiving an array of dictionaries each describing a project on POEditor.com if successful.
+	public func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
 		let parameters = ["api_token" : token,
 		                  "action" : "list_projects"] as [String : Any]
@@ -60,8 +62,9 @@ class POEditor: WebService
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
 	}
 	
-	/// Create a new project
-	func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
+	/// Create a new project on POEditor.com
+	/// - parameter completion: The completion block receiving Int with the project identifier if successful.
+	public func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
 	{
 		let parameters = ["api_token" : token,
 		                  "action" : "create_project",
@@ -74,8 +77,10 @@ class POEditor: WebService
 		responseProcessingDataTask(with: request, resultKey: "item", completion: completion).resume()
 	}
 	
-	/// List langauges of specific project
-	func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
+	/// List languages of specific project
+	/// - parameter projectID: The project identifier
+	/// - parameter completion: The completion block receiving an array of dictionaries each describing a language of the project on POEditor.com if successful.
+	public func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
 		let parameters = ["api_token" : token,
 		                  "action" : "list_languages",
@@ -86,8 +91,12 @@ class POEditor: WebService
 		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
 	}
 	
-	/// Expert project translations into a file
-	func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportType, completion: WebServiceCompletionHandler<URL>?)
+	/// Expert project translations into a file. The URL to the file is provided in the completion handler and you need to download it.
+	/// - parameter projectID: The project identifier
+	/// - parameter languageCode: The language code to export
+	/// - parameter type: The file type to generate
+	/// - parameter completion: The completion block receiving an URL for the exported file if successful.
+	public func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportFileType, completion: WebServiceCompletionHandler<URL>?)
 	{
 		let parameters = ["api_token" : token,
 		                  "action" : "export",

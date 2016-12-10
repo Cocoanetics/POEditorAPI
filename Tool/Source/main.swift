@@ -214,7 +214,7 @@ if mode == "xcode"
 {
 	export(with: settings, forXcode: true)
 }
-else if let format = ExportType(rawValue: mode)
+else if let format = POEditor.ExportFileType(rawValue: mode)
 {
 	export(with: settings, format: format, forXcode: false)
 }

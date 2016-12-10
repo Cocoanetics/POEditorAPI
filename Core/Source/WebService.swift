@@ -9,7 +9,7 @@
 import Foundation
 
 /// The result of a web service request
-enum WebServiceResult<T>
+public enum WebServiceResult<T>
 {
 	/// The result is deemed successful, the result is attached
 	case success(T)
@@ -18,7 +18,7 @@ enum WebServiceResult<T>
 	case failure(Error)
 }
 
-enum WebServiceError: Error
+public enum WebServiceError: Error
 {
 	case networkError(Error)
 	case serviceError(String)
@@ -26,10 +26,10 @@ enum WebServiceError: Error
 }
 
 /// The completion handler of a web service request
-typealias WebServiceCompletionHandler<T> = (WebServiceResult<T>)->()
+public typealias WebServiceCompletionHandler<T> = (WebServiceResult<T>)->()
 
 /// A web service exposing an endpoint with functions that can be called
-protocol WebService
+public protocol WebService
 {
 	/// the endpoint URL of the receiver
 	var endpoint: URL { get }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// POEditor uses older codes for Chinese
 func xCodeLocaleFromPOEditorCode(code: String) -> String
 {
 	var tmpCode = code
@@ -97,7 +98,7 @@ func processJSON(data: Data, outputFolderURL: URL) throws
 	}
 }
 
-func export(with settings: Settings, format: ExportType = .json, forXcode: Bool = true)
+func export(with settings: Settings, format: POEditor.ExportFileType = .json, forXcode: Bool = true)
 {
 	let exportURL = exportFolderURL(settings: settings)
 	
