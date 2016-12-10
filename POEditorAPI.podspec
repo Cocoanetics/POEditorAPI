@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = 'POEditorAPI'
-  spec.version      = '1.0'
+  spec.version      = '1.1.0'
   spec.summary      = "A POEditor.com API wrapper, written in Swift 3"
   spec.homepage     = "https://github.com/Cocoanetics/POEditorAPI"
   spec.author       = { "Oliver Drobnik" => "oliver@cocoanetics.com" }
