@@ -6,6 +6,24 @@ POEditor.com API
 
 An API wrapper written in Swift 3. With it you can add support for POEditor.com to your iOS and macOS apps.
 
+Using with Cocoapods
+--------------------
+
+You can add the following to your Podfile to include the latest version of POEditor API.
+  
+```
+platform :ios, '8.0'
+
+use_frameworks!
+project './potest.xcodeproj'
+
+target "potest" do
+	pod 'POEditorAPI'
+end
+```
+
+
+
 
 POEditor Tool (POET)
 ====================
