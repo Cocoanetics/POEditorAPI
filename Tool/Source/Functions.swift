@@ -45,6 +45,22 @@ func stringsFileName(for context: String) -> String?
 	return name + ".strings"
 }
 
+/// The file extension for the export format
+func fileExtension(for format: POEditor.ExportFileType) -> String
+{
+	switch format
+	{
+		case .android_strings, .apple_strings:
+			return "strings"
+		
+		case .key_value_json:
+			return "json"
+		
+		default:
+			return format.rawValue
+	}
+}
+
 func exportFolderURL(settings: Settings) -> URL
 {
 	// determine output folder: default, relative or absolute
@@ -167,7 +183,8 @@ func export(with settings: Settings, format: POEditor.ExportFileType = .json, fo
 					}
 					else
 					{
-						let outputFileURL = exportURL.appendingPathComponent(xcode).appendingPathExtension(format.rawValue)
+						let ext = fileExtension(for: format)
+						let outputFileURL = exportURL.appendingPathComponent(xcode).appendingPathExtension(ext)
 						
 						let name = outputFileURL.lastPathComponent
 						try data.write(to: outputFileURL)
