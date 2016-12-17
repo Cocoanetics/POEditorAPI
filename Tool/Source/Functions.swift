@@ -26,6 +26,25 @@ func xCodeLocaleFromPOEditorCode(code: String) -> String
 	return locale.identifier
 }
 
+/// The corrected strings file name to write output to
+func stringsFileName(for context: String) -> String?
+{
+	let fileExt = (context as NSString).pathExtension
+	let name = ((context as NSString).lastPathComponent as NSString).deletingPathExtension
+	
+	guard ["strings", "storyboard", "plist"].contains(fileExt) else
+	{
+		return nil
+	}
+	
+	if fileExt == "plist"
+	{
+		return name + "Plist.strings"
+	}
+	
+	return name + ".strings"
+}
+
 func exportFolderURL(settings: Settings) -> URL
 {
 	// determine output folder: default, relative or absolute
@@ -92,9 +111,10 @@ func processJSON(data: Data, outputFolderURL: URL) throws
 	
 	for key in contexts.keys.sorted()
 	{
-		guard let translations = contexts[key] else { continue }
+		guard let translations = contexts[key],
+			   let name = stringsFileName(for: key) else { continue }
 		
-		try translations.writeFile(name: key, to: outputFolderURL)
+		try translations.writeFile(name: name, to: outputFolderURL)
 	}
 }
 
