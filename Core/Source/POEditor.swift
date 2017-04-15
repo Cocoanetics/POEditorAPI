@@ -33,7 +33,7 @@ public final class POEditor: WebService
 	
 	// MARK: - Properties
 	/// Specify API endpoint
-	public let endpoint = URL(string: "https://poeditor.com/api/")!
+	public let endpoint = URL(string: "https://api.poeditor.com/v2/")!
 	
 	/// Specify ephemeral URL session
 	public lazy var session = {
@@ -54,12 +54,12 @@ public final class POEditor: WebService
 	/// - parameter completion: The completion block receiving an array of dictionaries each describing a project on POEditor.com if successful.
 	public func listProjects(completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
-		let parameters = ["api_token" : token,
-		                  "action" : "list_projects"] as [String : Any]
+		let parameters = ["api_token" : token] as [String : Any]
+
+        let path = endpoint.appendingPathComponent("projects/list")
+		let request = URLRequest.formPost(url: path, fields: parameters)
 		
-		let request = URLRequest.formPost(url: endpoint, fields: parameters)
-		
-		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
+		responseProcessingDataTask(with: request, resultKey: "projects", completion: completion).resume()
 	}
 	
 	/// Create a new project on POEditor.com
@@ -67,14 +67,14 @@ public final class POEditor: WebService
 	public func createProject(name: String, completion: WebServiceCompletionHandler<Int>?)
 	{
 		let parameters = ["api_token" : token,
-		                  "action" : "create_project",
 		                  "name": name] as [String : Any]
 
-		let request = URLRequest.formPost(url: endpoint, fields: parameters)
+        let path = endpoint.appendingPathComponent("projects/add")
+		let request = URLRequest.formPost(url: path, fields: parameters)
 		
 		// note: API is inconsistent, the new project's ID is part of the reponse returned
 		
-		responseProcessingDataTask(with: request, resultKey: "item", completion: completion).resume()
+		responseProcessingDataTask(with: request, resultKey: "project", completion: completion).resume()
 	}
 	
 	/// List languages of specific project
@@ -83,12 +83,12 @@ public final class POEditor: WebService
 	public func listProjectLanguages(projectID: Int, completion: WebServiceCompletionHandler<[JSONDictionary]>?)
 	{
 		let parameters = ["api_token" : token,
-		                  "action" : "list_languages",
 		                  "id": projectID] as [String : Any]
+
+        let path = endpoint.appendingPathComponent("languages/list")
+		let request = URLRequest.formPost(url: path, fields: parameters)
 		
-		let request = URLRequest.formPost(url: endpoint, fields: parameters)
-		
-		responseProcessingDataTask(with: request, resultKey: "list", completion: completion).resume()
+		responseProcessingDataTask(with: request, resultKey: "languages", completion: completion).resume()
 	}
 	
 	/// Expert project translations into a file. The URL to the file is provided in the completion handler and you need to download it.
@@ -99,14 +99,14 @@ public final class POEditor: WebService
 	public func exportProjectTranslation(projectID: Int, languageCode: String, type: ExportFileType, completion: WebServiceCompletionHandler<URL>?)
 	{
 		let parameters = ["api_token" : token,
-		                  "action" : "export",
 		                  "id": projectID,
 		                  "language": languageCode,
 		                  "type": type] as [String : Any]
+
+        let path = endpoint.appendingPathComponent("projects/export")
+		let request = URLRequest.formPost(url: path, fields: parameters)
 		
-		let request = URLRequest.formPost(url: endpoint, fields: parameters)
-		
-		responseProcessingDataTask(with: request, resultKey: "item", completion: completion).resume()
+		responseProcessingDataTask(with: request, resultKey: "url", completion: completion).resume()
 	}
 	
 	// MARK: - Response Processing
@@ -126,10 +126,15 @@ public final class POEditor: WebService
 			throw WebServiceError.serviceError(message ?? "Unknown Error")
 		}
 
-		guard let result = dictionary[resultKey] ?? response[resultKey] else
-		{
-			throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
-		}
+        guard let resultDict = dictionary["result"] as? JSONDictionary else
+        {
+            throw WebServiceError.unexpectedResponse("JSON response did not contain result dictionary")
+        }
+
+        guard let result = resultDict[resultKey] else
+        {
+            throw WebServiceError.unexpectedResponse("Could not find '\(resultKey)'")
+        }
 		
 		if let typedResult = result as? T
 		{

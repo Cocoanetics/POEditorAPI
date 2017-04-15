@@ -71,7 +71,7 @@ if settings.projectID == nil
 	
 	for (index, project) in availableProjects.enumerated()
 	{
-		guard let projectID = project["id"] as? String,
+		guard let projectID = project["id"] as? Int,
 			let projectName = project["name"] as? String else
 		{
 			continue
@@ -87,7 +87,7 @@ if settings.projectID == nil
 		let number = Int(string)
 	{
 		let project = availableProjects[number-1]
-		settings.projectID = Int((project["id"] as! String))
+		settings.projectID = project["id"] as? Int
 	}
 	else
 	{
