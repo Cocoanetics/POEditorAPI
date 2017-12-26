@@ -24,9 +24,10 @@ extension URLSession
 				}
 
 				/// check if there is data and the correct MIME type
-				guard let data = data, response?.mimeType == "application/json" else
+				guard let data = data,
+						response!.mimeType == "application/json" else
 				{
-					throw WebServiceError.unexpectedResponse("Unexpected response, MIME type '\(response?.mimeType)'")
+					throw WebServiceError.unexpectedResponse("Unexpected response, MIME type '\(response!.mimeType ?? "NONE")'")
 				}
 				
 				/// deserialize JSON

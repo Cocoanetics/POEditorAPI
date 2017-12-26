@@ -71,7 +71,7 @@ if settings.projectID == nil
 	
 	for (index, project) in availableProjects.enumerated()
 	{
-		guard let projectID = project["id"] as? Int,
+		guard let _ = project["id"] as? Int,
 			let projectName = project["name"] as? String else
 		{
 			continue
@@ -131,7 +131,7 @@ if settings.languages == nil
 	print("\nLanguages Available")
 	print("-------------------")
 	
-	for (index, language) in projectLanguages.enumerated()
+	for language in projectLanguages
 	{
 		guard let code = language["code"] as? String,
 			let name = language["name"] as? String,
@@ -139,8 +139,6 @@ if settings.languages == nil
 		{
 			continue
 		}
-		
-		let indexStr = String(format: "%3d", index+1)
 		
 		let codeFormat = code.padding(toLength: 5, withPad: " ", startingAt: 0)
 		
